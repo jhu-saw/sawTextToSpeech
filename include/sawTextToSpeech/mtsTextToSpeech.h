@@ -29,6 +29,10 @@ http://www.cisst.org/cisst/license.txt.
 // Always include last
 #include <sawTextToSpeech/sawTextToSpeechExport.h>
 
+// forward declaration for class containing members specific to each
+// OS/TTS package used
+class mtsTextToSpeechInternal;
+
 /*! */
 class CISST_EXPORT mtsTextToSpeech: public mtsTaskFromSignal
 {
@@ -36,17 +40,18 @@ class CISST_EXPORT mtsTextToSpeech: public mtsTaskFromSignal
     CMN_DECLARE_SERVICES(CMN_NO_DYNAMIC_CREATION, CMN_LOG_ALLOW_DEFAULT);
  public:
     mtsTextToSpeech(void);
-    ~mtsTextToSpeech(void) {};
+    ~mtsTextToSpeech(void);
     inline void Configure(const std::string & CMN_UNUSED(filename) = "") {};
-    inline void Startup(void) {};
+    void Startup(void);
     void Run(void);
-    inline void Cleanup(void) {};
+    void Cleanup(void);
 
     void AddInterfaceRequiredForEventString(const std::string & interfaceName, const std::string & eventName);
     void AddInterfaceRequiredForEventCharacter(const std::string & interfaceName, const std::string & eventName);
     void AddInterfaceRequiredForEventButton(const std::string & interfaceName);
 
  protected:
+    mtsTextToSpeechInternal * Internals;
     std::string StringToSpeechCommand;
     void StringToSpeech(const std::string & text);
     void CharacterToSpeech(const char & character);

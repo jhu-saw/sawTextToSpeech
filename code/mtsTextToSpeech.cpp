@@ -28,12 +28,29 @@ http://www.cisst.org/cisst/license.txt.
 #include <cisstMultiTask/mtsInterfaceProvided.h>
 #include <cisstParameterTypes/prmEventButton.h>
 
+#if (CISST_OS == CISST_WINDOWS)
+#include <windows.h>
+#include <sapi.h>
+#include <malloc.h>
+
+class mtsTextToSpeechInternal {
+public:
+    HRESULT HResult;
+    CLSID CLSId;
+    ISpVoice * Voice;
+};
+#else // CISST_WINDOWS
+
+// other OSs use system to start a command line tool
 #include <stdlib.h>
+
+#endif
 
 CMN_IMPLEMENT_SERVICES(mtsTextToSpeech);
 
 mtsTextToSpeech::mtsTextToSpeech(void):
-    mtsTaskFromSignal("text-to-speech")
+    mtsTaskFromSignal("text-to-speech"),
+    Internals(0)
 {
     mtsInterfaceProvided * interfaceProvided = this->AddInterfaceProvided("Configuration");
     if (interfaceProvided) {
@@ -57,9 +74,41 @@ mtsTextToSpeech::mtsTextToSpeech(void):
     StringToSpeechCommand = "say \"%s\"";
 #elif (CISST_OS == CISST_LINUX)
     StringToSpeechCommand = "flite -t \"%s\"";
+#elif (CISST_OS == CISST_WINDOWS)
+    Internals = new mtsTextToSpeechInternal;
 #else
-    #error "Sorry, we need to add the proper command line for Unix and use the Win32 API on Windows ...   You should turn off SAW_TextToSpeech for now."
+    #error "Sorry, we need to add the proper command line for this operating system ...   You should turn off SAW_TextToSpeech for now."
 #endif
+}
+
+mtsTextToSpeech::~mtsTextToSpeech()
+{
+#if (CISST_OS == CISST_WINDOWS)
+    delete Internals;
+    Internals = 0;
+#endif // CISST_WINDOWS
+}
+
+void mtsTextToSpeech::Startup(void)
+{
+#if (CISST_OS == CISST_WINDOWS)
+    Internals->HResult = CoInitialize(0);
+    Internals->HResult = CLSIDFromProgID(OLESTR("SAPI.SpVoice"), &(Internals->CLSId));
+
+    if (FAILED(Internals->HResult)) {
+        CMN_LOG_CLASS_INIT_ERROR << "Startup: failed to retrieve CLSID for COM server" << std::endl;
+        return;
+    }
+    Internals->Voice = 0;
+    Internals->HResult = CoCreateInstance(Internals->CLSId, NULL, CLSCTX_INPROC_SERVER,
+                                          __uuidof(ISpVoice), (LPVOID *)&(Internals->Voice));
+
+    if (FAILED(Internals->HResult)) {
+        CMN_LOG_CLASS_INIT_ERROR << "Startup: failed to start COM server" << std::endl;
+        return;
+    }
+    Internals->Voice->SetVolume(100);
+#endif // CISST_WINDOWS
 }
 
 void mtsTextToSpeech::Run(void)
@@ -68,11 +117,28 @@ void mtsTextToSpeech::Run(void)
     ProcessQueuedEvents();
 }
 
+void mtsTextToSpeech::Cleanup(void)
+{
+#if (CISST_OS == CISST_WINDOWS)
+    Internals->Voice->Release();
+    Internals->Voice = 0;
+    CoUninitialize();
+#endif // CISST_WINDOWS
+}
+
 void mtsTextToSpeech::StringToSpeech(const std::string & text)
 {
+#if (CISST_OS == CISST_WINDOWS)
+    // convert to wide char string
+    int size = MultiByteToWideChar(CP_ACP, 0, text.c_str(), -1, 0, 0);
+    wchar_t * buffer = (wchar_t *)_malloca(size * sizeof(wchar_t));
+    MultiByteToWideChar(CP_ACP, 0, text.c_str(), -1, buffer, size);
+    Internals->Voice->Speak(buffer, SPF_IS_XML, 0);
+#else
     std::stringstream command;
     command << cmnPrintf(StringToSpeechCommand.c_str()) << text;
     system(command.str().c_str());
+#endif
 }
 
 void mtsTextToSpeech::CharacterToSpeech(const char & character)
