@@ -137,7 +137,10 @@ void mtsTextToSpeech::StringToSpeech(const std::string & text)
 #else
     std::stringstream command;
     command << cmnPrintf(StringToSpeechCommand.c_str()) << text;
-    system(command.str().c_str());
+    int result = system(command.str().c_str());
+    if (result < 0) {
+        CMN_LOG_CLASS_RUN_ERROR << "StringToSpeech: failed to execute system call for \"" << command.str() << "\"" << std::endl;
+    }
 #endif
 }
 
