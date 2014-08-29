@@ -48,13 +48,17 @@ class CISST_EXPORT mtsTextToSpeech: public mtsTaskFromSignal
     void AddInterfaceRequiredForEventString(const std::string & interfaceName, const std::string & eventName);
     void AddInterfaceRequiredForEventCharacter(const std::string & interfaceName, const std::string & eventName);
     void AddInterfaceRequiredForEventButton(const std::string & interfaceName);
+    void SetPreemptive(const bool & preemptive);
 
  protected:
     mtsTextToSpeechInternal * Internals;
     std::string StringToSpeechCommand;
     void StringToSpeech(const std::string & text);
+    void StringToSpeechInternal(const std::string & text);
     void CharacterToSpeech(const char & character);
-    void ButtonToSpeech(const prmEventButton & button);
+    void ButtonToSpeech(const prmEventButton & button);                
+    bool Preemptive;
+    std::string LastString;
 };
 
 CMN_DECLARE_SERVICES_INSTANTIATION(mtsTextToSpeech);

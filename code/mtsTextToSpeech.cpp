@@ -49,12 +49,15 @@ CMN_IMPLEMENT_SERVICES(mtsTextToSpeech);
 
 mtsTextToSpeech::mtsTextToSpeech(void):
     mtsTaskFromSignal("text-to-speech"),
-    Internals(0)
-{
+    Internals(0),
+    Preemptive(false)
+{            
     mtsInterfaceProvided * interfaceProvided = this->AddInterfaceProvided("Configuration");
     if (interfaceProvided) {
         interfaceProvided->AddCommandWrite(&mtsTextToSpeech::AddInterfaceRequiredForEventButton, this,
-                                           "AddInterfaceRequiredForEventButton");
+                                           "AddInterfaceRequiredForEventButton");        
+        interfaceProvided->AddCommandWrite(&mtsTextToSpeech::SetPreemptive, this,
+                                           "SetPreemptive");
     } else {
         CMN_LOG_CLASS_INIT_ERROR << "constructor: failed to add provided interface \"Configuration\"" << std::endl;
     }
@@ -67,6 +70,7 @@ mtsTextToSpeech::mtsTextToSpeech(void):
     } else {
         CMN_LOG_CLASS_INIT_ERROR << "constructor: failed to add provided interface \"Commands\"" << std::endl;
     }
+
 
     // MacOS
 #if (CISST_OS == CISST_DARWIN)
@@ -112,8 +116,12 @@ void mtsTextToSpeech::Startup(void)
 
 void mtsTextToSpeech::Run(void)
 {
+    LastString = "";
     ProcessQueuedCommands();
     ProcessQueuedEvents();
+    if (Preemptive && LastString != "") {
+        StringToSpeechInternal(LastString);
+    }
 }
 
 void mtsTextToSpeech::Cleanup(void)
@@ -125,7 +133,7 @@ void mtsTextToSpeech::Cleanup(void)
 #endif // CISST_WINDOWS
 }
 
-void mtsTextToSpeech::StringToSpeech(const std::string & text)
+void mtsTextToSpeech::StringToSpeechInternal(const std::string & text)
 {
 #if (CISST_OS == CISST_WINDOWS)
     // convert to wide char string
@@ -138,9 +146,19 @@ void mtsTextToSpeech::StringToSpeech(const std::string & text)
     command << cmnPrintf(StringToSpeechCommand.c_str()) << text;
     int result = system(command.str().c_str());
     if (result < 0) {
-        CMN_LOG_CLASS_RUN_ERROR << "StringToSpeech: failed to execute system call for \"" << command.str() << "\"" << std::endl;
+        CMN_LOG_CLASS_RUN_ERROR << "StringToSpeechInternal: failed to execute system call for \"" << command.str() << "\"" << std::endl;
     }
 #endif
+}
+
+void mtsTextToSpeech::StringToSpeech(const std::string & text)
+{
+    if (Preemptive) {
+        LastString = text;
+    }
+    else {
+        StringToSpeechInternal(text);
+    }
 }
 
 void mtsTextToSpeech::CharacterToSpeech(const char & character)
@@ -188,4 +206,9 @@ void mtsTextToSpeech::AddInterfaceRequiredForEventButton(const std::string & int
     if (interfaceRequired) {
         interfaceRequired->AddEventHandlerWrite(&mtsTextToSpeech::ButtonToSpeech, this, "Button");
     }
+}
+
+void mtsTextToSpeech::SetPreemptive(const bool & preemptive)
+{
+    Preemptive = preemptive;
 }
