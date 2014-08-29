@@ -2,12 +2,10 @@
 /* ex: set filetype=cpp softtabstop=4 shiftwidth=4 tabstop=4 cindent expandtab: */
 
 /*
-
   Author(s):  Anton Deguet
   Created on: 2013-05-15
 
-  (C) Copyright 2013 Johns Hopkins University (JHU), All Rights
-  Reserved.
+  (C) Copyright 2013-2014 Johns Hopkins University (JHU), All Rights Reserved.
 
 --- begin cisst license - do not edit ---
 
@@ -32,7 +30,23 @@ http://www.cisst.org/cisst/license.txt.
 // OS/TTS package used
 class mtsTextToSpeechInternal;
 
-/*! */
+/*! Provides a simple component to convert text to speech.  The
+  current implementation uses command lines tools on Mac OS (say) and
+  Linux (flite).  On Windows, this component uses the native API.
+
+  The component has two default provided interfaces.  The
+  "Configuration" interface provides the command "SetPreemptive" (see
+  method with same name).  The interface "Commands" provides the
+  commands "StringToSpeech" and "CharacterToSpeech".
+
+  This component can also be configured by adding required interface
+  with event observers, see methods
+  AddInterfaceRequiredForEventString,
+  AddInterfaceRequiredForEventCharacter and
+  AddInterfaceRequiredForEventButton.  All these methods add a
+  required interface (unless said interface already exists) and an
+  event handler.
+*/
 class CISST_EXPORT mtsTextToSpeech: public mtsTaskFromSignal
 {
     // declare services, requires dynamic creation
@@ -45,9 +59,24 @@ class CISST_EXPORT mtsTextToSpeech: public mtsTaskFromSignal
     void Run(void);
     void Cleanup(void);
 
+    /*! Add a required interface with an event observer using a string
+      as payload.  If the interface already exists, the event is added
+      to the existing interface. */
     void AddInterfaceRequiredForEventString(const std::string & interfaceName, const std::string & eventName);
+
+    /*! Add a required interface with an event observer using a
+      character as payload.  If the interface already exists, the
+      event is added to the existing interface. */
     void AddInterfaceRequiredForEventCharacter(const std::string & interfaceName, const std::string & eventName);
+
+    /*! Add a required interface with an event observer using a
+      prmEventButton payload.  If the interface already exists, the
+      event is added to the existing interface. */
     void AddInterfaceRequiredForEventButton(const std::string & interfaceName);
+
+    /*! Turn on or off the preemptive mode, i.e. at each Run
+      execution, all messages received are dequeued and only the
+      last one is used for text to speech. */
     void SetPreemptive(const bool & preemptive);
 
  protected:
@@ -56,7 +85,7 @@ class CISST_EXPORT mtsTextToSpeech: public mtsTaskFromSignal
     void StringToSpeech(const std::string & text);
     void StringToSpeechInternal(const std::string & text);
     void CharacterToSpeech(const char & character);
-    void ButtonToSpeech(const prmEventButton & button);                
+    void ButtonToSpeech(const prmEventButton & button);
     bool Preemptive;
     std::string LastString;
 };

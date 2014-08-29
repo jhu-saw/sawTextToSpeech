@@ -2,12 +2,10 @@
 /* ex: set filetype=cpp softtabstop=4 shiftwidth=4 tabstop=4 cindent expandtab: */
 
 /*
-
   Author(s):  Anton Deguet
   Created on: 2013-05-15
 
-  (C) Copyright 2013 Johns Hopkins University (JHU), All Rights
-  Reserved.
+  (C) Copyright 2013-2014 Johns Hopkins University (JHU), All Rights Reserved.
 
 --- begin cisst license - do not edit ---
 
@@ -51,11 +49,11 @@ mtsTextToSpeech::mtsTextToSpeech(void):
     mtsTaskFromSignal("text-to-speech"),
     Internals(0),
     Preemptive(false)
-{            
+{
     mtsInterfaceProvided * interfaceProvided = this->AddInterfaceProvided("Configuration");
     if (interfaceProvided) {
         interfaceProvided->AddCommandWrite(&mtsTextToSpeech::AddInterfaceRequiredForEventButton, this,
-                                           "AddInterfaceRequiredForEventButton");        
+                                           "AddInterfaceRequiredForEventButton");
         interfaceProvided->AddCommandWrite(&mtsTextToSpeech::SetPreemptive, this,
                                            "SetPreemptive");
     } else {
@@ -119,7 +117,7 @@ void mtsTextToSpeech::Run(void)
     LastString = "";
     ProcessQueuedCommands();
     ProcessQueuedEvents();
-    if (Preemptive && LastString != "") {
+    if (Preemptive && (LastString != "")) {
         StringToSpeechInternal(LastString);
     }
 }
