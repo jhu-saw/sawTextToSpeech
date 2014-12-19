@@ -22,6 +22,7 @@ http://www.cisst.org/cisst/license.txt.
 #include <cisstMultiTask/mtsForwardDeclarations.h>
 #include <cisstMultiTask/mtsTaskFromSignal.h>
 #include <cisstParameterTypes/prmEventButton.h>
+#include <sawTextToSpeech/sawTextToSpeechRevision.h>
 
 // Always include last
 #include <sawTextToSpeech/sawTextToSpeechExport.h>
