@@ -54,10 +54,10 @@ if (cisst_FOUND_AS_REQUIRED)
                   "${sawTextToSpeech_BINARY_DIR}/sawTextToSpeechConfig.cmake"
                    @ONLY@)
 
-  include (CMakePackageConfigHelpers)
-  write_basic_package_version_file ("${sawTextToSpeech_BINARY_DIR}/sawTextToSpeechConfigVersion.cmake"
-                                    VERSION ${sawTextToSpeech_VERSION}
-                                    COMPATIBILITY SameMajorVersion)
+  cisst_add_config_version ("${sawTextToSpeech_BINARY_DIR}/sawTextToSpeechConfigVersion.cmake"
+                            VERSION ${sawTextToSpeech_VERSION}
+                            DESTINATION ${CISST_CMAKE_INSTALL_SUFFIX}/saw
+                            COMPONENT sawTextToSpeech)
 
   # Install target for headers and library
   install (DIRECTORY "${sawTextToSpeech_SOURCE_DIR}/include/sawTextToSpeech"
@@ -71,7 +71,6 @@ if (cisst_FOUND_AS_REQUIRED)
            ARCHIVE DESTINATION lib)
 
   install (FILES "${sawTextToSpeech_BINARY_DIR}/sawTextToSpeechConfig.cmake"
-                 "${sawTextToSpeech_BINARY_DIR}/sawTextToSpeechConfigVersion.cmake"
            DESTINATION "${CISST_CMAKE_INSTALL_SUFFIX}/saw")
 
 else (cisst_FOUND_AS_REQUIRED)
