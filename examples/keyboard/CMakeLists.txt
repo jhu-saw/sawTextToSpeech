@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2009-2014 Johns Hopkins University (JHU), All Rights Reserved.
+# (C) Copyright 2009-2015 Johns Hopkins University (JHU), All Rights Reserved.
 #
 # --- begin cisst license - do not edit ---
 #
@@ -30,9 +30,9 @@ if (cisst_FOUND_AS_REQUIRED)
 
   if (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
 
-    # sawRobotIO1394 configuration
+    # sawKeyboard configuration
     include_directories (${sawKeyboard_INCLUDE_DIR} ${sawTextToSpeech_INCLUDE_DIR})
-    link_directories (${sawKeyboard_LIBRARY_DIR} ${sawTextToSpeech_INCLUDE_DIR})
+    link_directories (${sawKeyboard_LIBRARY_DIR} ${sawTextToSpeech_LIBRARY_DIR})
 
     add_executable (sawTextToSpeechExampleKeyboard main.cpp)
     set_property (TARGET sawTextToSpeechExampleKeyboard PROPERTY FOLDER "sawTextToSpeech")

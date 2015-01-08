@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2013-2014 Johns Hopkins University (JHU), All Rights Reserved.
+# (C) Copyright 2013-2015 Johns Hopkins University (JHU), All Rights Reserved.
 #
 # --- begin cisst license - do not edit ---
 #
@@ -26,7 +26,11 @@ if (cisst_FOUND_AS_REQUIRED)
   # create/configure file for find_package (sawTextToSpeech)
   set (sawTextToSpeech_INCLUDE_DIR "${sawTextToSpeech_SOURCE_DIR}/include"
                                    "${sawTextToSpeech_BINARY_DIR}/include")
-  set (sawTextToSpeech_LIBRARY_DIR "${LIBRARY_OUTPUT_PATH}")
+  if (DEFINED LIBRARY_OUTPUT_PATH)
+    set (sawTextToSpeech_LIBRARY_DIR "${LIBRARY_OUTPUT_PATH}")
+  else ()
+    set (sawTextToSpeech_LIBRARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+  endif ()
   set (sawTextToSpeech_LIBRARIES sawTextToSpeech)
 
   # Set the version number
@@ -44,17 +48,24 @@ if (cisst_FOUND_AS_REQUIRED)
   add_library (sawTextToSpeech
                mtsTextToSpeech.cpp
                ${sawTextToSpeech_HEADER_DIR}/sawTextToSpeechExport.h
-               ${sawTextToSpeech_HEADER_DIR}/mtsTextToSpeech.h   
+               ${sawTextToSpeech_HEADER_DIR}/mtsTextToSpeech.h
                ${sawTextToSpeech_BINARY_DIR}/include/sawTextToSpeech/sawTextToSpeechRevision.h)
 
   set_property (TARGET sawTextToSpeech PROPERTY FOLDER "sawTextToSpeech")
   cisst_target_link_libraries (sawTextToSpeech ${REQUIRED_CISST_LIBRARIES})
 
+  cisst_is_catkin_build (sawTextToSpeech_IS_CATKIN_BUILT)
+  if (sawTextToSpeech_IS_CATKIN_BUILT)
+    set (sawTextToSpeech_CONFIG_FILE_DIR "${CATKIN_DEVEL_PREFIX}/cmake")
+  else ()
+    set (sawTextToSpeech_CONFIG_FILE_DIR "${sawTextToSpeech_BINARY_DIR}")
+  endif ()
+
   configure_file ("${CMAKE_CURRENT_SOURCE_DIR}/sawTextToSpeechConfig.cmake.in"
-                  "${sawTextToSpeech_BINARY_DIR}/sawTextToSpeechConfig.cmake"
+                  "${sawTextToSpeech_CONFIG_FILE_DIR}/sawTextToSpeechConfig.cmake"
                    @ONLY@)
 
-  cisst_add_config_version ("${sawTextToSpeech_BINARY_DIR}/sawTextToSpeechConfigVersion.cmake"
+  cisst_add_config_version ("${sawTextToSpeech_CONFIG_FILE_DIR}/sawTextToSpeechConfigVersion.cmake"
                             VERSION ${sawTextToSpeech_VERSION}
                             DESTINATION ${CISST_CMAKE_INSTALL_SUFFIX}/saw
                             COMPONENT sawTextToSpeech)
