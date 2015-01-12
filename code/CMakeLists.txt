@@ -23,14 +23,15 @@ if (cisst_FOUND_AS_REQUIRED)
   # load cisst configuration
   include (${CISST_USE_FILE})
 
+  # where to save the libraries
+  if (NOT DEFINED LIBRARY_OUTPUT_PATH)
+    set (LIBRARY_OUTPUT_PATH "${sawTextToSpeech_BINARY_DIR}/lib")
+  endif ()
+
   # create/configure file for find_package (sawTextToSpeech)
   set (sawTextToSpeech_INCLUDE_DIR "${sawTextToSpeech_SOURCE_DIR}/include"
                                    "${sawTextToSpeech_BINARY_DIR}/include")
-  if (DEFINED LIBRARY_OUTPUT_PATH)
-    set (sawTextToSpeech_LIBRARY_DIR "${LIBRARY_OUTPUT_PATH}")
-  else ()
-    set (sawTextToSpeech_LIBRARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-  endif ()
+  set (sawTextToSpeech_LIBRARY_DIR "${LIBRARY_OUTPUT_PATH}")
   set (sawTextToSpeech_LIBRARIES sawTextToSpeech)
 
   # Set the version number
