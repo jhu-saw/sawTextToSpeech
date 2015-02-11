@@ -23,9 +23,13 @@ if (cisst_FOUND_AS_REQUIRED)
   # load cisst configuration
   include (${CISST_USE_FILE})
 
-  # where to save the libraries
-  if (NOT DEFINED LIBRARY_OUTPUT_PATH)
+  # catkin/ROS paths
+  cisst_is_catkin_build (sawTextToSpeech_IS_CATKIN_BUILT)
+  if (sawTextToSpeech_IS_CATKIN_BUILT)
+    set (sawTextToSpeech_CONFIG_FILE_DIR "${CATKIN_DEVEL_PREFIX}/cmake")
     set (LIBRARY_OUTPUT_PATH "${sawTextToSpeech_BINARY_DIR}/lib")
+  else ()
+    set (sawTextToSpeech_CONFIG_FILE_DIR "${sawTextToSpeech_BINARY_DIR}")
   endif ()
 
   # create/configure file for find_package (sawTextToSpeech)
@@ -54,13 +58,6 @@ if (cisst_FOUND_AS_REQUIRED)
 
   set_property (TARGET sawTextToSpeech PROPERTY FOLDER "sawTextToSpeech")
   cisst_target_link_libraries (sawTextToSpeech ${REQUIRED_CISST_LIBRARIES})
-
-  cisst_is_catkin_build (sawTextToSpeech_IS_CATKIN_BUILT)
-  if (sawTextToSpeech_IS_CATKIN_BUILT)
-    set (sawTextToSpeech_CONFIG_FILE_DIR "${CATKIN_DEVEL_PREFIX}/cmake")
-  else ()
-    set (sawTextToSpeech_CONFIG_FILE_DIR "${sawTextToSpeech_BINARY_DIR}")
-  endif ()
 
   configure_file ("${CMAKE_CURRENT_SOURCE_DIR}/sawTextToSpeechConfig.cmake.in"
                   "${sawTextToSpeech_CONFIG_FILE_DIR}/sawTextToSpeechConfig.cmake"
