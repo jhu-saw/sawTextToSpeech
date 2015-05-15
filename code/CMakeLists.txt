@@ -41,7 +41,7 @@ if (cisst_FOUND_AS_REQUIRED)
   # Set the version number
   set (sawTextToSpeech_VERSION_MAJOR "1")
   set (sawTextToSpeech_VERSION_MINOR "0")
-  set (sawTextToSpeech_VERSION_PATCH "1")
+  set (sawTextToSpeech_VERSION_PATCH "2")
   set (sawTextToSpeech_VERSION "${sawTextToSpeech_VERSION_MAJOR}.${sawTextToSpeech_VERSION_MINOR}.${sawTextToSpeech_VERSION_PATCH}")
 
   # Generate sawTextToSpeechRevision.h
