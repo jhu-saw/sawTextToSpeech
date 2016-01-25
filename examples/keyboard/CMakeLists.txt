@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2009-2015 Johns Hopkins University (JHU), All Rights Reserved.
+# (C) Copyright 2009-2016 Johns Hopkins University (JHU), All Rights Reserved.
 #
 # --- begin cisst license - do not edit ---
 #
@@ -25,8 +25,8 @@ if (cisst_FOUND_AS_REQUIRED)
   include (${CISST_USE_FILE})
 
   # required saw components
-  cisst_find_saw_component (sawKeyboard 1.0 REQUIRED)
-  cisst_find_saw_component (sawTextToSpeech 1.0 REQUIRED)
+  find_package (sawKeyboard 1.0 REQUIRED)
+  find_package (sawTextToSpeech 1.0 REQUIRED)
 
   if (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
 

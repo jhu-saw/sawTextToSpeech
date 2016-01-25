@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2013-2015 Johns Hopkins University (JHU), All Rights Reserved.
+# (C) Copyright 2013-2016 Johns Hopkins University (JHU), All Rights Reserved.
 #
 # --- begin cisst license - do not edit ---
 #
@@ -61,11 +61,11 @@ if (cisst_FOUND_AS_REQUIRED)
 
   configure_file ("${CMAKE_CURRENT_SOURCE_DIR}/sawTextToSpeechConfig.cmake.in"
                   "${sawTextToSpeech_CONFIG_FILE_DIR}/sawTextToSpeechConfig.cmake"
-                   @ONLY@)
+                   @ONLY)
 
   cisst_add_config_version ("${sawTextToSpeech_CONFIG_FILE_DIR}/sawTextToSpeechConfigVersion.cmake"
                             VERSION ${sawTextToSpeech_VERSION}
-                            DESTINATION ${CISST_CMAKE_INSTALL_SUFFIX}/saw
+                            DESTINATION "share/sawTextToSpeech"
                             COMPONENT sawTextToSpeech)
 
   # Install target for headers and library
@@ -79,8 +79,8 @@ if (cisst_FOUND_AS_REQUIRED)
            LIBRARY DESTINATION lib
            ARCHIVE DESTINATION lib)
 
-  install (FILES "${sawTextToSpeech_BINARY_DIR}/sawTextToSpeechConfig.cmake"
-           DESTINATION "${CISST_CMAKE_INSTALL_SUFFIX}/saw")
+  install (FILES "${sawTextToSpeech_CONFIG_FILE_DIR}/sawTextToSpeechConfig.cmake"
+           DESTINATION "share/sawTextToSpeech")
 
 else (cisst_FOUND_AS_REQUIRED)
   message ("Information: code in ${CMAKE_CURRENT_SOURCE_DIR} will not be compiled, it requires ${REQUIRED_CISST_LIBRARIES}")
