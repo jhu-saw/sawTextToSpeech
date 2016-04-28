@@ -59,6 +59,7 @@ int main(int CMN_UNUSED(argc), char ** CMN_UNUSED(argv))
         std::cout << "." << std::flush;
         osaSleep(1.0 * cmn_s);
     }
+    std::cout << std::endl;
 
     // cleanup
     manager->KillAll();

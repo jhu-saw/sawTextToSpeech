@@ -9,6 +9,5 @@
 #
 # --- end cisst license ---
 
-project (sawTextToSpeech)
-add_subdirectory (code)
+add_subdirectory (components)
 add_subdirectory (examples)
