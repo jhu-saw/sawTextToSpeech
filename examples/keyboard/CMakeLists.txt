@@ -27,8 +27,8 @@ if (cisst_FOUND_AS_REQUIRED)
   include (${CISST_USE_FILE})
 
   # required saw components
-  find_package (sawKeyboard 1.0 REQUIRED)
-  find_package (sawTextToSpeech 1.0 REQUIRED)
+  find_package (sawKeyboard 1.1 REQUIRED)
+  find_package (sawTextToSpeech 1.1 REQUIRED)
 
   if (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
 
