@@ -65,6 +65,8 @@ mtsTextToSpeech::mtsTextToSpeech(void):
                                            "StringToSpeech");
         interfaceProvided->AddCommandWrite(&mtsTextToSpeech::CharacterToSpeech, this,
                                            "CharacterToSpeech");
+        interfaceProvided->AddCommandWrite(&mtsTextToSpeech::Beep, this,
+                                           "Beep");
     } else {
         CMN_LOG_CLASS_INIT_ERROR << "constructor: failed to add provided interface \"Commands\"" << std::endl;
     }
@@ -164,6 +166,25 @@ void mtsTextToSpeech::CharacterToSpeech(const char & character)
     std::string text;
     text.push_back(character);
     StringToSpeech(text);
+}
+
+void mtsTextToSpeech::Beep(const vct3 & durationFrequencyAmplitude)
+{
+#if (CISST_OS == CISST_DARWIN)
+    std::cerr << CMN_LOG_DETAILS << " not implemented yet " << std::endl;
+#elif (CISST_OS == CISST_LINUX)
+    std::stringstream command;
+    command << "play -n"
+            << " synth " << durationFrequencyAmplitude.Element(0)
+            << " sine " << durationFrequencyAmplitude.Element(1)
+            << " vol " << durationFrequencyAmplitude(2);
+    int result = system(command.str().c_str());
+    if (result < 0) {
+        CMN_LOG_CLASS_RUN_ERROR << "StringToSpeechInternal: failed to execute system call for \"" << command.str() << "\"" << std::endl;
+    }
+#elif (CISST_OS == CISST_WINDOWS)
+    std::cerr << CMN_LOG_DETAILS << " not implemented yet " << std::endl;
+#endif
 }
 
 void mtsTextToSpeech::ButtonToSpeech(const prmEventButton & button)
