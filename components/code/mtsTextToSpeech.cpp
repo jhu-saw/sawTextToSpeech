@@ -48,7 +48,9 @@ CMN_IMPLEMENT_SERVICES(mtsTextToSpeech);
 mtsTextToSpeech::mtsTextToSpeech(void):
     mtsTaskFromSignal("text-to-speech"),
     Internals(0),
-    Preemptive(false)
+    Preemptive(false),
+    LastString(""),
+    LastBeep(vct3(0.0))
 {
     mtsInterfaceProvided * interfaceProvided = this->AddInterfaceProvided("Configuration");
     if (interfaceProvided) {
@@ -76,7 +78,7 @@ mtsTextToSpeech::mtsTextToSpeech(void):
 #if (CISST_OS == CISST_DARWIN)
     StringToSpeechCommand = "say \"%s\"";
 #elif (CISST_OS == CISST_LINUX)
-    StringToSpeechCommand = "flite -t \"%s\"";
+    StringToSpeechCommand = "echo \"%s\" | espeak -s120 -k20";
 #elif (CISST_OS == CISST_WINDOWS)
     Internals = new mtsTextToSpeechInternal;
 #else
@@ -117,10 +119,14 @@ void mtsTextToSpeech::Startup(void)
 void mtsTextToSpeech::Run(void)
 {
     LastString = "";
+    LastBeep.SetAll(0.0);
     ProcessQueuedCommands();
     ProcessQueuedEvents();
     if (Preemptive && (LastString != "")) {
         StringToSpeechInternal(LastString);
+    }
+    if (Preemptive && (LastBeep != 0.0)) {
+        BeepInternal(LastBeep);
     }
 }
 
@@ -168,25 +174,6 @@ void mtsTextToSpeech::CharacterToSpeech(const char & character)
     StringToSpeech(text);
 }
 
-void mtsTextToSpeech::Beep(const vct3 & durationFrequencyAmplitude)
-{
-#if (CISST_OS == CISST_DARWIN)
-    std::cerr << CMN_LOG_DETAILS << " not implemented yet " << std::endl;
-#elif (CISST_OS == CISST_LINUX)
-    std::stringstream command;
-    command << "play -n"
-            << " synth " << durationFrequencyAmplitude.Element(0)
-            << " sine " << durationFrequencyAmplitude.Element(1)
-            << " vol " << durationFrequencyAmplitude(2);
-    int result = system(command.str().c_str());
-    if (result < 0) {
-        CMN_LOG_CLASS_RUN_ERROR << "StringToSpeechInternal: failed to execute system call for \"" << command.str() << "\"" << std::endl;
-    }
-#elif (CISST_OS == CISST_WINDOWS)
-    std::cerr << CMN_LOG_DETAILS << " not implemented yet " << std::endl;
-#endif
-}
-
 void mtsTextToSpeech::ButtonToSpeech(const prmEventButton & button)
 {
     std::string text;
@@ -201,6 +188,35 @@ void mtsTextToSpeech::ButtonToSpeech(const prmEventButton & button)
         text = "undefined";
     }
     StringToSpeech(text);
+}
+
+void mtsTextToSpeech::Beep(const vct3 & durationFrequencyAmplitude)
+{
+    if (Preemptive) {
+        LastBeep = durationFrequencyAmplitude;
+    }
+    else {
+        BeepInternal(durationFrequencyAmplitude);
+    }
+}
+
+void mtsTextToSpeech::BeepInternal(const vct3 & durationFrequencyAmplitude)
+{
+#if (CISST_OS == CISST_DARWIN)
+    std::cerr << CMN_LOG_DETAILS << " not implemented yet " << std::endl;
+#elif (CISST_OS == CISST_LINUX)
+    std::stringstream command;
+    command << "play -q -n"
+            << " synth " << durationFrequencyAmplitude.Element(0)
+            << " sine " << durationFrequencyAmplitude.Element(1)
+            << " vol " << durationFrequencyAmplitude(2);
+    int result = system(command.str().c_str());
+    if (result < 0) {
+        CMN_LOG_CLASS_RUN_ERROR << "StringToSpeechInternal: failed to execute system call for \"" << command.str() << "\"" << std::endl;
+    }
+#elif (CISST_OS == CISST_WINDOWS)
+    std::cerr << CMN_LOG_DETAILS << " not implemented yet " << std::endl;
+#endif
 }
 
 void mtsTextToSpeech::AddInterfaceRequiredForEventString(const std::string & interfaceName, const std::string & eventName)

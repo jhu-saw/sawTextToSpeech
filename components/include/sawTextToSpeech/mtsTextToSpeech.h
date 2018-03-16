@@ -88,8 +88,10 @@ class CISST_EXPORT mtsTextToSpeech: public mtsTaskFromSignal
     void CharacterToSpeech(const char & character);
     void ButtonToSpeech(const prmEventButton & button);
     void Beep(const vct3 & durationFrequencyAmplitude);
+    void BeepInternal(const vct3 & durationFrequencyAmplitude);
     bool Preemptive;
     std::string LastString;
+    vct3 LastBeep;
 };
 
 CMN_DECLARE_SERVICES_INSTANTIATION(mtsTextToSpeech);
