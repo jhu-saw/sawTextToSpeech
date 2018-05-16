@@ -1,6 +1,19 @@
 Change log
 ==========
 
+1.2.0 (2018-05-16)
+==================
+
+* API changes:
+  * None
+* Deprecated features:
+  * None
+* New features:
+  * Added Beep command using sox/play on Linux
+  * Use espeak on Linux instead of flite, sounds a bit better
+* Bug fixes:
+  * None
+
 
 1.1.1 (2017-11-07)
 ==================
