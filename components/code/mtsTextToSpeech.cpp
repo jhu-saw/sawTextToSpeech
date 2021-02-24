@@ -203,7 +203,7 @@ void mtsTextToSpeech::Beep(const vct3 & durationFrequencyAmplitude)
 void mtsTextToSpeech::BeepInternal(const vct3 & durationFrequencyAmplitude)
 {
 #if (CISST_OS == CISST_DARWIN)
-    std::cerr << CMN_LOG_DETAILS << " not implemented yet " << std::endl;
+    std::cerr << CMN_LOG_DETAILS << " not implemented yet " << durationFrequencyAmplitude << std::endl;
 #elif (CISST_OS == CISST_LINUX)
     std::stringstream command;
     command << "play -q -n -t alsa"
