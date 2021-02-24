@@ -5,7 +5,7 @@
   Author(s):  Anton Deguet
   Created on: 2013-05-15
 
-  (C) Copyright 2013-2020 Johns Hopkins University (JHU), All Rights Reserved.
+  (C) Copyright 2013-2021 Johns Hopkins University (JHU), All Rights Reserved.
 
 --- begin cisst license - do not edit ---
 
@@ -42,6 +42,12 @@ public:
 #include <stdlib.h>
 
 #endif
+
+#include <QThread>
+#include <QTextToSpeech>
+#include <QVoice>
+#include <QLocale>
+#include <QVector>
 
 CMN_IMPLEMENT_SERVICES(mtsTextToSpeech);
 
@@ -84,6 +90,38 @@ mtsTextToSpeech::mtsTextToSpeech(void):
 #else
     #error "Sorry, we need to add the proper command line for this operating system ...   You should turn off SAW_TextToSpeech for now."
 #endif
+
+
+    // Qt test
+    // List the available engines.
+    QStringList engines = QTextToSpeech::availableEngines();
+    std::cerr << "Available engines:";
+    for (auto engine : engines) {
+        std::cerr << "  " << engine.toStdString();
+    }
+    // Create an instance using the default engine/plugin.
+    QTextToSpeech *speech = new QTextToSpeech();
+    // List the available locales.
+    std::cerr << "Available locales:";
+    for (auto locale : speech->availableLocales()) {
+        std::cerr << "  " << locale.name().toStdString();
+    }
+    // Set locale.
+    speech->setLocale(QLocale(QLocale::English, QLocale::LatinScript, QLocale::UnitedStates));
+    // List the available voices.
+    std::cerr << "Available voices:";
+    for (auto voice : speech->availableVoices()) {
+        std::cerr << "  " << voice.name().toStdString();
+    }
+    // Display properties.
+    std::cerr << "Locale:" << speech->locale().name().toStdString();
+    std::cerr << "Pitch:" << speech->pitch();
+    std::cerr << "Rate:" << speech->rate();
+    std::cerr << "Voice:" << speech->voice().name().toStdString();
+    std::cerr << "Volume:" << speech->volume();
+    std::cerr << "State:" << speech->state();
+    // Say something.
+    speech->say("Hello, world! This is the Qt speech engine.");
 }
 
 mtsTextToSpeech::~mtsTextToSpeech()
