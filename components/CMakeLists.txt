@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2013-2016 Johns Hopkins University (JHU), All Rights Reserved.
+# (C) Copyright 2013-2021 Johns Hopkins University (JHU), All Rights Reserved.
 #
 # --- begin cisst license - do not edit ---
 #
@@ -19,9 +19,31 @@ set (REQUIRED_CISST_LIBRARIES cisstCommon
                               cisstOSAbstraction
                               cisstMultiTask
                               cisstParameterTypes)
+set (REQUIRED_CISST_LIBRARIES_QT ${REQUIRED_CISST_LIBRARIES} cisstQt)
 
-find_package (cisst 1.0.10 COMPONENTS ${REQUIRED_CISST_LIBRARIES})
+# first look with Qt
+find_package (cisst 1.0.10 COMPONENTS ${REQUIRED_CISST_LIBRARIES_QT})
+if (cisst_FOUND_AS_REQUIRED)
+  # if CISST was using Qt, maybe we can too so offer option
+  option (sawTextToSpeech_HAS_QT "Use Qt classes for text to speech and beep" ON)
+  if (sawTextToSpeech_HAS_QT)
+    # we still need to make sure Qt5TextToSpeech is available
+    find_package (Qt5TextToSpeech QUIET)
+    if (Qt5TextToSpeech_FOUND)
+      include_directories (${Qt5TextToSpeech_INCLUDE_DIRS})
+      set (REQUIRED_CISST_LIBRARIES ${REQUIRED_CISST_LIBRARIES_QT})
+      set (CMAKE_AUTOMOC ON)
+    else ()
+      message ("Can't find Qt 5 package Qt5TextToSpeech, maybe you need to `sudo apt install libqt5texttospeech5-dev`")
+      set (sawTextToSpeech_HAS_QT OFF)
+    endif ()
+  endif ()
+else ()
+  find_package (cisst 1.0.10 COMPONENTS ${REQUIRED_CISST_LIBRARIES})
+  set (sawTextToSpeech_HAS_QT OFF)
+endif ()
 
+# cisst found, with or without Qt
 if (cisst_FOUND_AS_REQUIRED)
 
   # load cisst configuration
@@ -43,6 +65,10 @@ if (cisst_FOUND_AS_REQUIRED)
        "${sawTextToSpeech_BINARY_DIR}/include")
   set (sawTextToSpeech_LIBRARY_DIR "${LIBRARY_OUTPUT_PATH}")
   set (sawTextToSpeech_LIBRARIES sawTextToSpeech)
+  if (sawTextToSpeech_HAS_QT)
+    set (sawTextToSpeech_LIBRARY_DIR "${LIBRARY_OUTPUT_PATH}" ${Qt5TextToSpeech_LIBRARY_DIR})
+    set (sawTextToSpeech_LIBRARIES ${sawTextToSpeech_LIBRARIES} ${Qt5TextToSpeech_LIBRARIES})
+  endif ()
 
   # Set the version number
   set (sawTextToSpeech_VERSION_MAJOR "1")
