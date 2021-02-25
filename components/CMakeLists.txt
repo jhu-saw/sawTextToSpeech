@@ -90,7 +90,9 @@ if (cisst_FOUND_AS_REQUIRED)
 
   set_property (TARGET sawTextToSpeech PROPERTY FOLDER "sawTextToSpeech")
   cisst_target_link_libraries (sawTextToSpeech ${REQUIRED_CISST_LIBRARIES})
-
+  if (sawTextToSpeech_HAS_QT)
+    target_link_libraries (sawTextToSpeech ${Qt5TextToSpeech_LIBRARIES})
+  endif ()
   set (sawTextToSpeech_CMAKE_CONFIG_FILE
        "${sawTextToSpeech_CONFIG_FILE_DIR}/sawTextToSpeechConfig.cmake")
 

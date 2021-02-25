@@ -43,7 +43,6 @@ public:
 
 #endif
 
-#include <QThread>
 #include <QTextToSpeech>
 #include <QVoice>
 #include <QLocale>
