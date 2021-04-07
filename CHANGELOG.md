@@ -1,6 +1,18 @@
 Change log
 ==========
 
+1.3.0 (2021-04-08)
+==================
+
+* API changes:
+  * None
+* Deprecated features:
+  * None
+* New features:
+  * None
+* Bug fixes:
+  * Minor update to compile with latest cisst libraries
+
 1.2.0 (2018-05-16)
 ==================
 
