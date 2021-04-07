@@ -21,6 +21,7 @@ http://www.cisst.org/cisst/license.txt.
 #include <iostream>
 // cisst/saw
 #include <cisstOSAbstraction/osaSleep.h>
+#include <cisstMultiTask/mtsManagerLocal.h>
 #include <sawKeyboard/mtsKeyboard.h>
 #include <sawTextToSpeech/mtsTextToSpeech.h>
 

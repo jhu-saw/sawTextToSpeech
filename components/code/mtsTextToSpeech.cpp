@@ -5,7 +5,7 @@
   Author(s):  Anton Deguet
   Created on: 2013-05-15
 
-  (C) Copyright 2013-2014 Johns Hopkins University (JHU), All Rights Reserved.
+  (C) Copyright 2013-2020 Johns Hopkins University (JHU), All Rights Reserved.
 
 --- begin cisst license - do not edit ---
 
@@ -206,7 +206,7 @@ void mtsTextToSpeech::BeepInternal(const vct3 & durationFrequencyAmplitude)
     std::cerr << CMN_LOG_DETAILS << " not implemented yet " << std::endl;
 #elif (CISST_OS == CISST_LINUX)
     std::stringstream command;
-    command << "play -q -n"
+    command << "play -q -n -t alsa"
             << " synth " << durationFrequencyAmplitude.Element(0)
             << " sine " << durationFrequencyAmplitude.Element(1)
             << " vol " << durationFrequencyAmplitude(2);
