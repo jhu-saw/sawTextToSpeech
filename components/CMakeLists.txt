@@ -9,9 +9,8 @@
 #
 # --- end cisst license ---
 
-project (sawTextToSpeech)
-
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.10)
+project (sawTextToSpeech VERSION 1.3.0)
 
 # Core libraries
 set (REQUIRED_CISST_LIBRARIES cisstCommon
@@ -44,12 +43,6 @@ if (cisst_FOUND_AS_REQUIRED)
   set (sawTextToSpeech_LIBRARY_DIR "${LIBRARY_OUTPUT_PATH}")
   set (sawTextToSpeech_LIBRARIES sawTextToSpeech)
 
-  # Set the version number
-  set (sawTextToSpeech_VERSION_MAJOR "1")
-  set (sawTextToSpeech_VERSION_MINOR "3")
-  set (sawTextToSpeech_VERSION_PATCH "0")
-  set (sawTextToSpeech_VERSION "${sawTextToSpeech_VERSION_MAJOR}.${sawTextToSpeech_VERSION_MINOR}.${sawTextToSpeech_VERSION_PATCH}")
-
   # Generate sawTextToSpeechRevision.h
   configure_file ("${sawTextToSpeech_SOURCE_DIR}/code/sawTextToSpeechRevision.h.in"
                   "${sawTextToSpeech_BINARY_DIR}/include/sawTextToSpeech/sawTextToSpeechRevision.h")
@@ -62,7 +55,10 @@ if (cisst_FOUND_AS_REQUIRED)
                ${sawTextToSpeech_HEADER_DIR}/mtsTextToSpeech.h
                ${sawTextToSpeech_BINARY_DIR}/include/sawTextToSpeech/sawTextToSpeechRevision.h)
 
-  set_property (TARGET sawTextToSpeech PROPERTY FOLDER "sawTextToSpeech")
+  set_target_properties (sawTextToSpeech PROPERTIES
+                         VERSION ${sawTextToSpeech_VERSION}
+                         FOLDER "sawTextToSpeech")
+
   cisst_target_link_libraries (sawTextToSpeech ${REQUIRED_CISST_LIBRARIES})
 
   set (sawTextToSpeech_CMAKE_CONFIG_FILE
@@ -81,15 +77,17 @@ if (cisst_FOUND_AS_REQUIRED)
   install (DIRECTORY "${sawTextToSpeech_SOURCE_DIR}/include/sawTextToSpeech"
                      "${sawTextToSpeech_BINARY_DIR}/include/sawTextToSpeech"
            DESTINATION include
+           COMPONENT sawTextToSpeech
            PATTERN .svn EXCLUDE)
 
   install (TARGETS sawTextToSpeech
-           RUNTIME DESTINATION bin
-           LIBRARY DESTINATION lib
-           ARCHIVE DESTINATION lib)
+           RUNTIME DESTINATION bin COMPONENT sawTextToSpeech
+           LIBRARY DESTINATION lib COMPONENT sawTextToSpeech
+           ARCHIVE DESTINATION lib COMPONENT sawTextToSpeech)
 
   install (FILES "${sawTextToSpeech_CMAKE_CONFIG_FILE}"
-           DESTINATION "share/sawTextToSpeech")
+           DESTINATION "share/sawTextToSpeech"
+           COMPONENT sawTextToSpeech)
 
 else (cisst_FOUND_AS_REQUIRED)
   message ("Information: code in ${CMAKE_CURRENT_SOURCE_DIR} will not be compiled, it requires ${REQUIRED_CISST_LIBRARIES}")

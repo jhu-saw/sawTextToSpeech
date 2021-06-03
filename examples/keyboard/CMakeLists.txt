@@ -9,7 +9,8 @@
 #
 # --- end cisst license ---
 
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.10)
+project (sawTextToSpeechExampleKeyboard VERSION 1.3.0)
 
 # create a list of required cisst libraries
 set (REQUIRED_CISST_LIBRARIES cisstCommon
@@ -46,6 +47,11 @@ if (cisst_FOUND_AS_REQUIRED)
 
     # link against cisst libraries (and dependencies)
     cisst_target_link_libraries (sawTextToSpeechExampleKeyboard ${REQUIRED_CISST_LIBRARIES})
+
+    install (TARGETS sawTextToSpeechExampleKeyboard
+             RUNTIME DESTINATION bin COMPONENT sawTextToSpeechExamples
+             LIBRARY DESTINATION lib COMPONENT sawTextToSpeechExamples
+             ARCHIVE DESTINATION lib COMPONENT sawTextToSpeechExamples)
 
   endif (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
 
