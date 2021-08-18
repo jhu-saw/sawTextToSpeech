@@ -13,10 +13,6 @@ cmake_minimum_required(VERSION 3.10)
 project (sawTextToSpeechAll VERSION 1.3.0)
 
 if (UNIX)
-  # following 3 lines are for CMake < 3.12
-  set (CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_VERSION_MAJOR})
-  set (CPACK_PACKAGE_VERSION_MINOR ${CMAKE_VERSION_MINOR})
-  set (CPACK_PACKAGE_VERSION_PATCH ${CMAKE_VERSION_PATCH})
   set (CPACK_PACKAGE_VENDOR "JHU")
   set (CPACK_DEBIAN_PACKAGE_MAINTAINER "anton.deguet@jhu.edu")
   set (CPACK_GENERATOR "DEB")
