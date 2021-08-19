@@ -77,13 +77,13 @@ if (cisst_FOUND_AS_REQUIRED)
   install (DIRECTORY "${sawTextToSpeech_SOURCE_DIR}/include/sawTextToSpeech"
                      "${sawTextToSpeech_BINARY_DIR}/include/sawTextToSpeech"
            DESTINATION include
-           COMPONENT sawTextToSpeech
+           COMPONENT sawTextToSpeech-dev
            PATTERN .svn EXCLUDE)
 
-  install (TARGETS sawTextToSpeech
-           RUNTIME DESTINATION bin COMPONENT sawTextToSpeech
-           LIBRARY DESTINATION lib COMPONENT sawTextToSpeech
-           ARCHIVE DESTINATION lib COMPONENT sawTextToSpeech)
+  install (TARGETS sawTextToSpeech COMPONENT sawTextToSpeech
+           RUNTIME DESTINATION bin
+           LIBRARY DESTINATION lib
+           ARCHIVE DESTINATION lib)
 
   install (FILES "${sawTextToSpeech_CMAKE_CONFIG_FILE}"
            DESTINATION "share/sawTextToSpeech"

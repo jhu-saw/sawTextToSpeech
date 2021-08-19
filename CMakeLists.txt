@@ -19,13 +19,12 @@ if (UNIX)
   set (CPACK_DEB_PACKAGE_COMPONENT ON)
   set (CPACK_DEB_COMPONENT_INSTALL ON)
   set (CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
-  # set (CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ON)
+  set (CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ON)
 endif (UNIX)
 
 add_subdirectory (components)
 
 set (sawTextToSpeech_DIR "${sawTextToSpeechAll_BINARY_DIR}/components")
-
 add_subdirectory (examples)
 
 include (CPack)
