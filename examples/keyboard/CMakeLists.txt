@@ -38,7 +38,8 @@ if (cisst_FOUND_AS_REQUIRED)
     link_directories (${sawKeyboard_LIBRARY_DIR} ${sawTextToSpeech_LIBRARY_DIR})
 
     add_executable (sawTextToSpeechExampleKeyboard main.cpp)
-    set_property (TARGET sawTextToSpeechExampleKeyboard PROPERTY FOLDER "sawTextToSpeech")
+    set_target_properties (sawTextToSpeechExampleKeyboard PROPERTIES
+                           FOLDER "sawTextToSpeech")
 
     # link against non cisst libraries and cisst components
     target_link_libraries (sawTextToSpeechExampleKeyboard
@@ -48,10 +49,10 @@ if (cisst_FOUND_AS_REQUIRED)
     # link against cisst libraries (and dependencies)
     cisst_target_link_libraries (sawTextToSpeechExampleKeyboard ${REQUIRED_CISST_LIBRARIES})
 
-    install (TARGETS sawTextToSpeechExampleKeyboard
-             RUNTIME DESTINATION bin COMPONENT sawTextToSpeechExamples
-             LIBRARY DESTINATION lib COMPONENT sawTextToSpeechExamples
-             ARCHIVE DESTINATION lib COMPONENT sawTextToSpeechExamples)
+    install (TARGETS sawTextToSpeechExampleKeyboard COMPONENT sawTextToSpeech-Examples
+             RUNTIME DESTINATION bin
+             LIBRARY DESTINATION lib
+             ARCHIVE DESTINATION lib)
 
   endif (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
 

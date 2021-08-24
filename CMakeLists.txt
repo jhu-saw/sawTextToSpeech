@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2011-2011 Johns Hopkins University (JHU), All Rights Reserved.
+# (C) Copyright 2011-2021 Johns Hopkins University (JHU), All Rights Reserved.
 #
 # --- begin cisst license - do not edit ---
 #
@@ -29,5 +29,5 @@ add_subdirectory (examples)
 
 include (CPack)
 cpack_add_component (sawTextToSpeech)
-cpack_add_component (sawTextToSpeechExamples
+cpack_add_component (sawTextToSpeech-Examples
                      DEPENDS sawTextToSpeech)
