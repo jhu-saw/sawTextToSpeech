@@ -27,14 +27,7 @@ if (cisst_FOUND_AS_REQUIRED)
   include (${CISST_USE_FILE})
 
   # catkin/ROS paths
-  cisst_is_catkin_build (sawTextToSpeech_IS_CATKIN_BUILT)
-  if (sawTextToSpeech_IS_CATKIN_BUILT)
-    set (sawTextToSpeech_CONFIG_FILE_DIR
-         "${CATKIN_DEVEL_PREFIX}/share/sawTextToSpeech/cmake")
-    set (LIBRARY_OUTPUT_PATH "${sawTextToSpeech_BINARY_DIR}/lib")
-  else ()
-    set (sawTextToSpeech_CONFIG_FILE_DIR "${sawTextToSpeech_BINARY_DIR}")
-  endif ()
+  cisst_set_output_path ()
 
   # create/configure file for find_package (sawTextToSpeech)
   set (sawTextToSpeech_INCLUDE_DIR
@@ -43,9 +36,8 @@ if (cisst_FOUND_AS_REQUIRED)
   set (sawTextToSpeech_LIBRARY_DIR "${LIBRARY_OUTPUT_PATH}")
   set (sawTextToSpeech_LIBRARIES sawTextToSpeech)
 
-  # Generate sawTextToSpeechRevision.h
-  configure_file ("${sawTextToSpeech_SOURCE_DIR}/code/sawTextToSpeechRevision.h.in"
-                  "${sawTextToSpeech_BINARY_DIR}/include/sawTextToSpeech/sawTextToSpeechRevision.h")
+  # add all config files for this component
+  cisst_add_config_files (sawTextToSpeech)
 
   include_directories (${sawTextToSpeech_INCLUDE_DIR})
   set (sawTextToSpeech_HEADER_DIR "${sawTextToSpeech_SOURCE_DIR}/include/sawTextToSpeech")
@@ -61,18 +53,6 @@ if (cisst_FOUND_AS_REQUIRED)
 
   cisst_target_link_libraries (sawTextToSpeech ${REQUIRED_CISST_LIBRARIES})
 
-  set (sawTextToSpeech_CMAKE_CONFIG_FILE
-       "${sawTextToSpeech_CONFIG_FILE_DIR}/sawTextToSpeechConfig.cmake")
-
-  configure_file ("${CMAKE_CURRENT_SOURCE_DIR}/cmake/sawTextToSpeechConfig.cmake.in"
-                  "${sawTextToSpeech_CMAKE_CONFIG_FILE}"
-                   @ONLY)
-
-  cisst_add_config_version ("${sawTextToSpeech_CONFIG_FILE_DIR}/sawTextToSpeechConfigVersion.cmake"
-                            VERSION ${sawTextToSpeech_VERSION}
-                            DESTINATION "share/sawTextToSpeech"
-                            COMPONENT sawTextToSpeech)
-
   # Install target for headers and library
   install (DIRECTORY "${sawTextToSpeech_SOURCE_DIR}/include/sawTextToSpeech"
                      "${sawTextToSpeech_BINARY_DIR}/include/sawTextToSpeech"
@@ -84,10 +64,6 @@ if (cisst_FOUND_AS_REQUIRED)
            RUNTIME DESTINATION bin
            LIBRARY DESTINATION lib
            ARCHIVE DESTINATION lib)
-
-  install (FILES "${sawTextToSpeech_CMAKE_CONFIG_FILE}"
-           DESTINATION "share/sawTextToSpeech"
-           COMPONENT sawTextToSpeech)
 
 else (cisst_FOUND_AS_REQUIRED)
   message ("Information: code in ${CMAKE_CURRENT_SOURCE_DIR} will not be compiled, it requires ${REQUIRED_CISST_LIBRARIES}")
