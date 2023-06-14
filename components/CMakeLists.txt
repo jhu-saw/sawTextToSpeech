@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2013-2021 Johns Hopkins University (JHU), All Rights Reserved.
+# (C) Copyright 2013-2023 Johns Hopkins University (JHU), All Rights Reserved.
 #
 # --- begin cisst license - do not edit ---
 #
@@ -39,7 +39,7 @@ if (cisst_FOUND_AS_REQUIRED)
   # add all config files for this component
   cisst_add_config_files (sawTextToSpeech)
 
-  include_directories (${sawTextToSpeech_INCLUDE_DIR})
+  include_directories (BEFORE ${sawTextToSpeech_INCLUDE_DIR})
   set (sawTextToSpeech_HEADER_DIR "${sawTextToSpeech_SOURCE_DIR}/include/sawTextToSpeech")
   add_library (sawTextToSpeech
                code/mtsTextToSpeech.cpp
