@@ -1,7 +1,7 @@
 Change log
 ==========
 
-1.4.0 (2023-11-15)
+1.4.0 (2023-11-xx)
 ==================
 
 * API changes:
@@ -11,7 +11,7 @@ Change log
 * New features:
   * CMake:
     * Updated install targets and debian packages generation
-    * Works with ROS2/colcon	
+    * Works with ROS2/colcon
 * Bug fixes:
   * None
 

@@ -10,7 +10,7 @@
 # --- end cisst license ---
 
 cmake_minimum_required (VERSION 3.10)
-project (sawTextToSpeech VERSION 1.3.0)
+project (sawTextToSpeech VERSION 1.4.0)
 
 # Core libraries
 set (REQUIRED_CISST_LIBRARIES cisstCommon
@@ -19,7 +19,7 @@ set (REQUIRED_CISST_LIBRARIES cisstCommon
                               cisstMultiTask
                               cisstParameterTypes)
 
-find_package (cisst 1.1.0 COMPONENTS ${REQUIRED_CISST_LIBRARIES})
+find_package (cisst 1.2.0 COMPONENTS ${REQUIRED_CISST_LIBRARIES})
 
 if (cisst_FOUND_AS_REQUIRED)
 

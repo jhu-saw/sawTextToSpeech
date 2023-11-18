@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2013-2022 Johns Hopkins University (JHU), All Rights Reserved.
+# (C) Copyright 2013-2023 Johns Hopkins University (JHU), All Rights Reserved.
 #
 # --- begin cisst license - do not edit ---
 #
@@ -10,6 +10,6 @@
 # --- end cisst license ---
 
 cmake_minimum_required (VERSION 3.10)
-project (sawTextToSpeechExamples VERSION 1.3.0)
+project (sawTextToSpeechExamples VERSION 1.4.0)
 
 add_subdirectory (keyboard)
