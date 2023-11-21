@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2009-2021 Johns Hopkins University (JHU), All Rights Reserved.
+# (C) Copyright 2009-2023 Johns Hopkins University (JHU), All Rights Reserved.
 #
 # --- begin cisst license - do not edit ---
 #
@@ -9,7 +9,8 @@
 #
 # --- end cisst license ---
 
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.10)
+project (sawTextToSpeechExampleKeyboard VERSION 1.4.0)
 
 # create a list of required cisst libraries
 set (REQUIRED_CISST_LIBRARIES cisstCommon
@@ -19,7 +20,7 @@ set (REQUIRED_CISST_LIBRARIES cisstCommon
                               cisstParameterTypes)
 
 # find cisst and make sure the required libraries have been compiled
-find_package (cisst 1.1.0 COMPONENTS ${REQUIRED_CISST_LIBRARIES})
+find_package (cisst 1.2.0 COMPONENTS ${REQUIRED_CISST_LIBRARIES})
 
 if (cisst_FOUND_AS_REQUIRED)
 
@@ -27,8 +28,8 @@ if (cisst_FOUND_AS_REQUIRED)
   include (${CISST_USE_FILE})
 
   # required saw components
-  find_package (sawKeyboard 1.3 REQUIRED)
-  find_package (sawTextToSpeech 1.3 REQUIRED)
+  find_package (sawKeyboard 1.4 REQUIRED)
+  find_package (sawTextToSpeech 1.4 REQUIRED)
 
   if (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
 
@@ -37,7 +38,8 @@ if (cisst_FOUND_AS_REQUIRED)
     link_directories (${sawKeyboard_LIBRARY_DIR} ${sawTextToSpeech_LIBRARY_DIR})
 
     add_executable (sawTextToSpeechExampleKeyboard main.cpp)
-    set_property (TARGET sawTextToSpeechExampleKeyboard PROPERTY FOLDER "sawTextToSpeech")
+    set_target_properties (sawTextToSpeechExampleKeyboard PROPERTIES
+                           FOLDER "sawTextToSpeech")
 
     # link against non cisst libraries and cisst components
     target_link_libraries (sawTextToSpeechExampleKeyboard
@@ -46,6 +48,11 @@ if (cisst_FOUND_AS_REQUIRED)
 
     # link against cisst libraries (and dependencies)
     cisst_target_link_libraries (sawTextToSpeechExampleKeyboard ${REQUIRED_CISST_LIBRARIES})
+
+    install (TARGETS sawTextToSpeechExampleKeyboard COMPONENT sawTextToSpeech-Examples
+             RUNTIME DESTINATION bin
+             LIBRARY DESTINATION lib
+             ARCHIVE DESTINATION lib)
 
   endif (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
 
