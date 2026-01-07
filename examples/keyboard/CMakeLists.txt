@@ -20,7 +20,7 @@ set (REQUIRED_CISST_LIBRARIES cisstCommon
                               cisstParameterTypes)
 
 # find cisst and make sure the required libraries have been compiled
-find_package (cisst 1.2.0 COMPONENTS ${REQUIRED_CISST_LIBRARIES})
+find_package (cisst 1.4.0 COMPONENTS ${REQUIRED_CISST_LIBRARIES})
 
 if (cisst_FOUND_AS_REQUIRED)
 
@@ -28,8 +28,8 @@ if (cisst_FOUND_AS_REQUIRED)
   include (${CISST_USE_FILE})
 
   # required saw components
-  find_package (sawKeyboard 1.4 REQUIRED)
-  find_package (sawTextToSpeech 1.4 REQUIRED)
+  find_package (sawKeyboard 1.4.1 REQUIRED)
+  find_package (sawTextToSpeech 1.4.1 REQUIRED)
 
   if (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
 
