@@ -10,6 +10,6 @@
 # --- end cisst license ---
 
 cmake_minimum_required (VERSION 3.16)
-project (sawTextToSpeechExamples VERSION 1.4.0)
+project (sawTextToSpeechExamples VERSION 1.4.1)
 
 add_subdirectory (keyboard)
