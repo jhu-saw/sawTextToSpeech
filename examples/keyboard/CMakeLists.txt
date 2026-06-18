@@ -22,8 +22,6 @@ set (REQUIRED_CISST_LIBRARIES cisstCommon
 # find cisst and make sure the required libraries have been compiled
 find_package (cisst 1.4.0 REQUIRED COMPONENTS ${REQUIRED_CISST_LIBRARIES})
 
-
-
 # required saw components
 find_package (sawKeyboard 1.4.1 REQUIRED)
 find_package (sawTextToSpeech 1.4.1 REQUIRED)
