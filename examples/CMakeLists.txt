@@ -12,4 +12,9 @@
 cmake_minimum_required (VERSION 3.16)
 project (sawTextToSpeechExamples VERSION 1.4.0)
 
-add_subdirectory (keyboard)
+find_package (sawKeyboard 1.4.1 QUIET)
+if (sawKeyboard_FOUND)
+  add_subdirectory (keyboard)
+else ()
+  message ("sawTextToSpeach example requires sawKeyboard, skipped.")
+endif ()
