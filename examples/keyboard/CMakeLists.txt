@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2009-2023 Johns Hopkins University (JHU), All Rights Reserved.
+# (C) Copyright 2009-2026 Johns Hopkins University (JHU), All Rights Reserved.
 #
 # --- begin cisst license - do not edit ---
 #
@@ -20,40 +20,31 @@ set (REQUIRED_CISST_LIBRARIES cisstCommon
                               cisstParameterTypes)
 
 # find cisst and make sure the required libraries have been compiled
-find_package (cisst 1.4.0 COMPONENTS ${REQUIRED_CISST_LIBRARIES})
+find_package (cisst 1.4.0 REQUIRED COMPONENTS ${REQUIRED_CISST_LIBRARIES})
 
-if (cisst_FOUND_AS_REQUIRED)
+# required saw components
+find_package (sawKeyboard 1.4.1 REQUIRED)
+find_package (sawTextToSpeech 1.4.1 REQUIRED)
 
-  # load cisst configuration
-  include (${CISST_USE_FILE})
+if (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
 
-  # required saw components
-  find_package (sawKeyboard 1.4.1 REQUIRED)
-  find_package (sawTextToSpeech 1.4.1 REQUIRED)
+  # sawKeyboard configuration
+  include_directories (${sawKeyboard_INCLUDE_DIR} ${sawTextToSpeech_INCLUDE_DIR})
+  link_directories (${sawKeyboard_LIBRARY_DIR} ${sawTextToSpeech_LIBRARY_DIR})
 
-  if (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
+  add_executable (sawTextToSpeechExampleKeyboard main.cpp)
+  set_target_properties (sawTextToSpeechExampleKeyboard PROPERTIES
+                         FOLDER "sawTextToSpeech")
 
-    # sawKeyboard configuration
-    include_directories (${sawKeyboard_INCLUDE_DIR} ${sawTextToSpeech_INCLUDE_DIR})
-    link_directories (${sawKeyboard_LIBRARY_DIR} ${sawTextToSpeech_LIBRARY_DIR})
+  # link against non cisst libraries and cisst components
+  target_link_libraries (sawTextToSpeechExampleKeyboard PRIVATE
+                         ${sawKeyboard_LIBRARIES}
+                         ${sawTextToSpeech_LIBRARIES}
+                         ${cisst_LIBRARIES})
 
-    add_executable (sawTextToSpeechExampleKeyboard main.cpp)
-    set_target_properties (sawTextToSpeechExampleKeyboard PROPERTIES
-                           FOLDER "sawTextToSpeech")
+  install (TARGETS sawTextToSpeechExampleKeyboard COMPONENT sawTextToSpeech-Examples
+           RUNTIME DESTINATION bin
+           LIBRARY DESTINATION lib
+           ARCHIVE DESTINATION lib)
 
-    # link against non cisst libraries and cisst components
-    target_link_libraries (sawTextToSpeechExampleKeyboard
-                           ${sawKeyboard_LIBRARIES}
-                           ${sawTextToSpeech_LIBRARIES})
-
-    # link against cisst libraries (and dependencies)
-    cisst_target_link_libraries (sawTextToSpeechExampleKeyboard ${REQUIRED_CISST_LIBRARIES})
-
-    install (TARGETS sawTextToSpeechExampleKeyboard COMPONENT sawTextToSpeech-Examples
-             RUNTIME DESTINATION bin
-             LIBRARY DESTINATION lib
-             ARCHIVE DESTINATION lib)
-
-  endif (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
-
-endif (cisst_FOUND_AS_REQUIRED)
+endif (sawKeyboard_FOUND AND sawTextToSpeech_FOUND)
