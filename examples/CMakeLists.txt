@@ -10,7 +10,7 @@
 # --- end cisst license ---
 
 cmake_minimum_required (VERSION 3.16)
-project (sawTextToSpeechExamples VERSION 1.4.0)
+project (sawTextToSpeechExamples VERSION 1.5.0)
 
 find_package (sawKeyboard 1.4.1 QUIET)
 if (sawKeyboard_FOUND)

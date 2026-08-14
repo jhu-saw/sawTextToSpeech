@@ -10,7 +10,7 @@
 # --- end cisst license ---
 
 cmake_minimum_required (VERSION 3.16)
-project (sawTextToSpeechExampleKeyboard VERSION 1.4.0)
+project (sawTextToSpeechExampleKeyboard VERSION 1.5.0)
 
 # create a list of required cisst libraries
 set (REQUIRED_CISST_LIBRARIES cisstCommon

@@ -1,6 +1,12 @@
 Change log
 ==========
 
+1.5.0 (TBD)
+===========
+
+* Build:
+  * Raised the CMake minimum version to 3.16 and updated CMake support for the current cisst release.
+
 1.4.0 (2023-11-21)
 ==================
 

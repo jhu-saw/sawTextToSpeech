@@ -10,7 +10,7 @@
 # --- end cisst license ---
 
 cmake_minimum_required(VERSION 3.16)
-project (sawTextToSpeechAll VERSION 1.4.1)
+project (sawTextToSpeechAll VERSION 1.5.0)
 
 find_package (cisst REQUIRED)
 cisst_cpack_settings (
