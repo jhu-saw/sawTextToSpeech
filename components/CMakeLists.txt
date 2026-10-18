@@ -14,7 +14,6 @@ project (sawTextToSpeech VERSION 1.5.0)
 
 # Core libraries
 set (REQUIRED_CISST_LIBRARIES cisstCommon
-                              cisstVector
                               cisstOSAbstraction
                               cisstMultiTask
                               cisstParameterTypes)
