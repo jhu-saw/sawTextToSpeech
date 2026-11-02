@@ -24,6 +24,8 @@ http://www.cisst.org/cisst/license.txt.
 #include <cisstParameterTypes/prmEventButton.h>
 #include <sawTextToSpeech/sawTextToSpeechRevision.h>
 
+#include <Eigen/Dense>
+
 // Always include last
 #include <sawTextToSpeech/sawTextToSpeechExport.h>
 
@@ -55,10 +57,10 @@ class CISST_EXPORT mtsTextToSpeech: public mtsTaskFromSignal
  public:
     mtsTextToSpeech(void);
     ~mtsTextToSpeech(void);
-    inline void Configure(const std::string & CMN_UNUSED(filename) = "") {};
-    void Startup(void);
-    void Run(void);
-    void Cleanup(void);
+    inline void Configure(const std::string & CMN_UNUSED(filename) = "") override {};
+    void Startup(void) override;
+    void Run(void) override;
+    void Cleanup(void) override;
 
     /*! Add a required interface with an event observer using a string
       as payload.  If the interface already exists, the event is added
@@ -87,11 +89,11 @@ class CISST_EXPORT mtsTextToSpeech: public mtsTaskFromSignal
     void StringToSpeechInternal(const std::string & text);
     void CharacterToSpeech(const char & character);
     void ButtonToSpeech(const prmEventButton & button);
-    void Beep(const vct3 & durationFrequencyAmplitude);
-    void BeepInternal(const vct3 & durationFrequencyAmplitude);
+    void Beep(const Eigen::Vector3d& durationFrequencyAmplitude);
+    void BeepInternal(const Eigen::Vector3d& durationFrequencyAmplitude);
     bool Preemptive;
     std::string LastString;
-    vct3 LastBeep;
+    Eigen::Vector3d LastBeep;
 };
 
 CMN_DECLARE_SERVICES_INSTANTIATION(mtsTextToSpeech);

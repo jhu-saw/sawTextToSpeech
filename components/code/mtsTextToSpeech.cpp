@@ -50,7 +50,7 @@ mtsTextToSpeech::mtsTextToSpeech(void):
     Internals(0),
     Preemptive(false),
     LastString(""),
-    LastBeep(vct3(0.0))
+    LastBeep(Eigen::Vector3d::Zero())
 {
     mtsInterfaceProvided * interfaceProvided = this->AddInterfaceProvided("Configuration");
     if (interfaceProvided) {
@@ -119,13 +119,13 @@ void mtsTextToSpeech::Startup(void)
 void mtsTextToSpeech::Run(void)
 {
     LastString = "";
-    LastBeep.SetAll(0.0);
+    LastBeep.setZero();
     ProcessQueuedCommands();
     ProcessQueuedEvents();
     if (Preemptive && (LastString != "")) {
         StringToSpeechInternal(LastString);
     }
-    if (Preemptive && (LastBeep != 0.0)) {
+    if (Preemptive && (LastBeep.any())) {
         BeepInternal(LastBeep);
     }
 }
@@ -190,7 +190,7 @@ void mtsTextToSpeech::ButtonToSpeech(const prmEventButton & button)
     StringToSpeech(text);
 }
 
-void mtsTextToSpeech::Beep(const vct3 & durationFrequencyAmplitude)
+void mtsTextToSpeech::Beep(const Eigen::Vector3d& durationFrequencyAmplitude)
 {
     if (Preemptive) {
         LastBeep = durationFrequencyAmplitude;
@@ -200,15 +200,15 @@ void mtsTextToSpeech::Beep(const vct3 & durationFrequencyAmplitude)
     }
 }
 
-void mtsTextToSpeech::BeepInternal(const vct3 & durationFrequencyAmplitude)
+void mtsTextToSpeech::BeepInternal(const Eigen::Vector3d& durationFrequencyAmplitude)
 {
 #if (CISST_OS == CISST_DARWIN)
     std::cerr << CMN_LOG_DETAILS << " not implemented yet " << std::endl;
 #elif (CISST_OS == CISST_LINUX)
     std::stringstream command;
     command << "play -q -n -t alsa"
-            << " synth " << durationFrequencyAmplitude.Element(0)
-            << " sine " << durationFrequencyAmplitude.Element(1)
+            << " synth " << durationFrequencyAmplitude(0)
+            << " sine " << durationFrequencyAmplitude(1)
             << " vol " << durationFrequencyAmplitude(2);
     int result = system(command.str().c_str());
     if (result < 0) {
